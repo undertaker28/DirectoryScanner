@@ -1,0 +1,115 @@
+﻿<Window 
+    x:Class="Presentation.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:Presentation"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:models="clr-namespace:Presentation.Models" 
+    xmlns:viewModels="clr-namespace:Presentation.ViewModels"
+    d:DataContext="{d:DesignInstance Type=viewModels:AppViewModel}"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    Background="{DynamicResource MaterialDesignPaper}"
+    TextElement.FontWeight="Medium"
+    TextElement.FontSize="14"
+    FontFamily="{materialDesign:MaterialDesignFont}"
+    mc:Ignorable="d"
+    Title="Directory Scanner" 
+    WindowStartupLocation="CenterScreen"
+    Height="650" Width="1100"
+    MinHeight="600" MinWidth="900">
+
+    <Grid>
+        <Grid
+            Margin="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.75*" />
+                <ColumnDefinition Width="0.25*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid
+                Grid.Column="0">
+                <TreeView ItemsSource="{Binding Path=Tree.Root, IsAsync=True}">
+                    <TreeView.Resources>
+                        <HierarchicalDataTemplate 
+                            ItemsSource="{Binding Path=Children, IsAsync=True}" 
+                            DataType="{x:Type models:Directory}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image 
+                                    Height="20" 
+                                    Width="20" 
+                                    Margin="0 0 6 0" 
+                                    Source="/Assets/Folder.png">
+                                </Image>
+                                <TextBlock VerticalAlignment="Center" Text="{Binding Path=Name}" />
+                                <TextBlock VerticalAlignment="Center" Text="{Binding Path=Length, StringFormat=' ({0} байт, '}" />
+                                <TextBlock VerticalAlignment="Center" Text="{Binding Path=RelativeSize, StringFormat='{}{0:N2}%)'}" />
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                        <DataTemplate DataType="{x:Type models:File}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image 
+                                    Height="20" 
+                                    Width="20"
+                                    Margin="0 0 6 0"
+                                    Source="/Assets/Blank.png" />
+                                <TextBlock VerticalAlignment="Center" Text="{Binding Path=Name}" />
+                                <TextBlock VerticalAlignment="Center" Text="{Binding Path=Length, StringFormat=' ({0} байт, '}" />
+                                <TextBlock VerticalAlignment="Center" Text="{Binding Path=RelativeSize, StringFormat='{}{0:N2}%)'}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
+            </Grid>
+
+            <Grid
+                Grid.Column="1"
+                Margin="16 0 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <materialDesign:Card
+                    Grid.Row="0"
+                    Padding="16"
+                    UniformCornerRadius="8">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Button
+                            x:Name="chooseDirectory"
+                            Grid.Row="0"
+                            Content="Select a directory"
+                            Style="{DynamicResource MaterialDesignOutlinedSecondaryButton}"
+                            Margin="0 0 0 12"
+                            Command="{Binding Path=ChooseDirectory}">
+                        </Button>
+
+                        <Button
+                            x:Name="startScan"
+                            Grid.Row="1"
+                            Content="Start scanning"
+                            Style="{DynamicResource MaterialDesignOutlinedSecondaryButton}"
+                            Margin="0 0 0 12"
+                            Command="{Binding Path=StartScan}">
+                        </Button>
+
+                        <Button
+                            x:Name="stopScan"
+                            Grid.Row="2"
+                            Content="Stop scanning"
+                            Style="{DynamicResource MaterialDesignOutlinedSecondaryButton}"
+                            Command="{Binding Path=StopScan}">
+                        </Button>
+                    </Grid>
+                </materialDesign:Card>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
