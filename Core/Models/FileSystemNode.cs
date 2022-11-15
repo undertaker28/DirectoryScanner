@@ -17,10 +17,5 @@
         {
             Length = length;
         }
-
-        public FileSystemNode(string fullName, string name, List<FileSystemNode>? children) : this(fullName, name)
-        {
-            Children = children;
-        }
     }
 }
